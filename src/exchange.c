@@ -269,6 +269,11 @@ enum wps_result do_wps_exchange()
 		ret_val = UNKNOWN_ERROR;
 	}
 
+	/* Revalidate NACK message when M5 message NOT received and key status is KEY2_WIP */
+	if (ret_val == KEY_REJECTED && last_msg == M3 && get_key_status() == KEY2_WIP && !get_pin_string_mode()) {
+		ret_val = UNKNOWN_ERROR;
+	}
+
 	/*
 	 * Always completely terminate the WPS session, else some WPS state machines may
 	 * get stuck in their current state and won't accept new WPS registrar requests
